@@ -10,6 +10,12 @@ const Form = () => {
   const [loading, setLoading] = useState(false);
   const { setDataRes } = useUnitStore();
 
+  const saveToLocalStorage = (key: string, value: any) => {
+    if (typeof window !== "undefined") {
+      localStorage.setItem(key, JSON.stringify(value));
+    }
+  };
+
   const sendToApi = () => {
     axios
       .post("https://readers-ordinance-once-enters.trycloudflare.com/analyze", {
@@ -24,11 +30,16 @@ const Form = () => {
         console.log(response);
         setLoading(false);
         setDataRes(response.data);
+
+        saveToLocalStorage("myData", response.data);
+
         router.push("/unit-detail");
       })
       .catch(function (error) {
         console.log(error);
       });
+
+    router.push("/unit-detail");
   };
   return (
     <MainLayouts>

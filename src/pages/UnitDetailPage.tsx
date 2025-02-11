@@ -3,8 +3,7 @@
 import Image from "next/image";
 import React, { useState, useEffect } from "react";
 import Chart from "chart.js/auto";
-import { data } from "@/data/data";
-import { useUnitStore } from "@/common/unitStore";
+
 interface Package {
   name: string;
   price: string;
@@ -12,6 +11,13 @@ interface Package {
   total: number;
   features: string[];
   color: string;
+  scores: {
+    Luck: number;
+    Prestige: number;
+    Power: number;
+    Health: number;
+    Wealth: number;
+  };
 }
 
 const styles: Record<string, React.CSSProperties> = {
@@ -65,6 +71,16 @@ const styles: Record<string, React.CSSProperties> = {
   },
 };
 
+const data = {
+  scores: {
+    Luck: 85,
+    Prestige: 80,
+    Power: 75,
+    Health: 90,
+    Wealth: 88,
+  },
+};
+
 const packages: Package[] = [
   {
     name: "แพ็คเกจพื้นฐาน",
@@ -78,6 +94,13 @@ const packages: Package[] = [
       "ต้นไม้มงคลในห้อง",
       "โมบายกระดิ่งลม",
     ],
+    scores: {
+      Luck: 70,
+      Prestige: 65,
+      Power: 60,
+      Health: 75,
+      Wealth: 68,
+    },
     color: "#4100F4",
   },
   {
@@ -85,6 +108,13 @@ const packages: Package[] = [
     price: "฿ xxxxxxxx",
     increase: 30,
     total: 73,
+    scores: {
+      Luck: 78,
+      Prestige: 72,
+      Power: 68,
+      Health: 80,
+      Wealth: 74,
+    },
     features: [
       "กระจกสะท้อนพลังลบ",
       "ผ้าม่านกันแสง",
@@ -114,43 +144,79 @@ const packages: Package[] = [
       "ชั้นวางตู้",
       "ผ้าปูเตียงเสริมธาตุ",
     ],
+    scores: {
+      Luck: 90,
+      Prestige: 88,
+      Power: 85,
+      Health: 95,
+      Wealth: 92,
+    },
     color: "#FF7439",
   },
 ];
 
 const UnitComponent = () => {
   // const { unit, setUnit } = useUnitStore();
-  const { dataRes } = useUnitStore();
+  const [dataRes, setDataRes] = useState<any>(null);
   console.log("dataRes", dataRes);
 
-  const chartData = {
-    labels: ["โชคลาภ", "บารมี", "อำนาจ", "สุขภาพ", "คลามร่ำรวย"],
-    datasets: [
-      {
-        label: "ค่าพลัง",
-        data: [
-          data.scores.Luck,
-          data.scores.Power,
-          data.scores.Prestige,
-          data.scores.Health,
-          data.scores.Wealth,
-        ],
-        backgroundColor: "#8C8C8C",
-        borderColor: "#4100F4",
-        borderWidth: 2,
-      },
-    ],
+  const getFromLocalStorage = (key: string) => {
+    if (typeof window !== "undefined") {
+      const storedValue = localStorage.getItem(key);
+      return storedValue ? JSON.parse(storedValue) : null;
+    }
+    return null;
   };
 
   useEffect(() => {
-    if (data) {
+    const storedData = getFromLocalStorage("myData");
+    if (storedData) {
+      setDataRes(storedData);
+    }
+  }, []);
+
+  console.log("dataRes", dataRes);
+
+  useEffect(() => {
+    if (dataRes) {
+      const chartData = {
+        labels: ["โชคลาภ", "บารมี", "อำนาจ", "สุขภาพ", "คลามร่ำรวย"],
+        datasets: [
+          {
+            label: "ค่าพลัง",
+            data: [
+              dataRes?.scores.Luck,
+              dataRes?.scores.Power,
+              dataRes?.scores.Prestige,
+              dataRes?.scores.Health,
+              dataRes?.scores.Wealth,
+            ],
+            backgroundColor: "#AA0000",
+            borderColor: "#AA0000",
+            borderWidth: 2,
+          },
+          ...packages.map((pkg) => ({
+            label: pkg.name,
+            data: [
+              pkg.scores.Luck,
+              pkg.scores.Prestige,
+              pkg.scores.Power,
+              pkg.scores.Health,
+              pkg.scores.Wealth,
+            ],
+            backgroundColor: pkg.color,
+            borderColor: pkg.color,
+          })),
+        ],
+      };
+
       const ctx = document.getElementById("myChart").getContext("2d");
       const myChart = new Chart(ctx, {
         type: "radar",
         data: chartData,
       });
     }
-  }, [data]);
+  }, [dataRes]);
 
   const roomData = {
     room: "A1102",
@@ -292,11 +358,11 @@ const UnitComponent = () => {
           ))} */}
 
           <h2>ข้อดึ</h2>
-          {data.good_aspects.split("\n").map((d) => (
+          {dataRes?.good_aspects.split("\n").map((d) => (
             <div key={d}>{d}</div>
           ))}
           <h2>ข้อเสีย</h2>
-          {data.bad_aspects.split("\n").map((d) => (
+          {dataRes?.bad_aspects.split("\n").map((d) => (
             <div key={d}>{d}</div>
           ))}
         </div>
@@ -310,7 +376,7 @@ const UnitComponent = () => {
           }}
         >
           <h2 className="text-lg font-bold">วิธีแก้เบื้องต้น</h2>
-          {data.recommendations.split("\n").map((d) => (
+          {dataRes?.recommendations.split("\n").map((d: any) => (
             <div key={d}>{d}</div>
           ))}
         </div>
