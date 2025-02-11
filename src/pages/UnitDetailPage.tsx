@@ -3,6 +3,8 @@
 import Image from "next/image";
 import React, { useState, useEffect } from "react";
 import Chart from "chart.js/auto";
+import dayjs from "dayjs";
+import { Radar } from "react-chartjs-2";
 
 interface Package {
   name: string;
@@ -152,6 +154,7 @@ const packages: Package[] = [
 const UnitComponent = () => {
   // const { unit, setUnit } = useUnitStore();
   const [dataRes, setDataRes] = useState<any>(null);
+
   console.log("dataRes", dataRes);
 
   const getFromLocalStorage = (key: string) => {
@@ -170,6 +173,8 @@ const UnitComponent = () => {
   }, []);
 
   console.log("dataRes", dataRes);
+  const [selected, setSelected] = useState(0);
+  const [pkgData, setPkgData] = useState("แพ็คเกจพื้นฐาน");
 
   useEffect(() => {
     if (dataRes) {
@@ -189,28 +194,31 @@ const UnitComponent = () => {
             borderColor: "#5F5C5C",
             borderWidth: 2,
           },
-          ...packages.map((pkg) => ({
-            label: pkg.name,
-            data: [
-              pkg.scores.Luck,
-              pkg.scores.Prestige,
-              pkg.scores.Power,
-              pkg.scores.Health,
-              pkg.scores.Wealth,
-            ],
-            backgroundColor: pkg.background,
-            borderColor: pkg.color,
-          })),
+          ...packages
+            // .filter((d) => pkgData === d.name)
+            .map((pkg) => ({
+              label: pkg.name,
+              data: [
+                pkg.scores.Luck,
+                pkg.scores.Prestige,
+                pkg.scores.Power,
+                pkg.scores.Health,
+                pkg.scores.Wealth,
+              ],
+              backgroundColor: pkg.background,
+              borderColor: pkg.color,
+            })),
         ],
       };
 
       const ctx = document.getElementById("myChart").getContext("2d");
-      const myChart = new Chart(ctx, {
+
+      new Chart(ctx, {
         type: "radar",
         data: chartData,
       });
     }
-  }, [dataRes]);
+  }, [dataRes, pkgData]);
 
   const roomData = {
     room: "A1102",
@@ -226,8 +234,6 @@ const UnitComponent = () => {
       { title: "Title 2", points: ["จุดเด่นที่ 1", "จุดเด่นที่ 2"] },
     ],
   };
-
-  const [selected, setSelected] = useState(0);
 
   return (
     <div
@@ -247,7 +253,10 @@ const UnitComponent = () => {
           />
 
           <div className="absolute bottom-4 right-4 text-blue-700 font-bold text-xl p-2 rounded-lg">
-            พลังฮวงจุ้ยของห้องนี้ <br /> <span className="text-3xl">43%</span>
+            พลังฮวงจุ้ยของห้องนี้ <br />{" "}
+            <span className="text-3xl">
+              {dataRes?.current_feng_shui.percentage}
+            </span>
           </div>
         </div>
 
@@ -402,7 +411,10 @@ const UnitComponent = () => {
             {packages.map((pkg, index) => (
               <div
                 key={index}
-                onClick={() => setSelected(index)}
+                onClick={() => {
+                  setSelected(index);
+                  setPkgData(pkg.name);
+                }}
                 style={{
                   ...styles.packageCard,
                   backgroundColor: selected === index ? pkg.color : "#f3f4f6",
@@ -440,7 +452,7 @@ const UnitComponent = () => {
 
           <div className="flex mx-auto my-auto">
             <div className="border border-gray-400 pt-0 rounded-xl  w-full h-fit my-auto  shadow-xl">
-              <canvas id="myChart"></canvas>
+              <canvas id="myChart" />
             </div>
           </div>
         </div>
