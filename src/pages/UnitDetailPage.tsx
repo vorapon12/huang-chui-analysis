@@ -4,6 +4,7 @@ import Image from "next/image";
 import React, { useState, useEffect } from "react";
 import Chart from "chart.js/auto";
 import { data } from "@/data/data";
+import { useUnitStore } from "@/common/unitStore";
 interface Package {
   name: string;
   price: string;
@@ -119,6 +120,8 @@ const packages: Package[] = [
 
 const UnitComponent = () => {
   // const { unit, setUnit } = useUnitStore();
+  const { dataRes } = useUnitStore();
+  console.log("dataRes", dataRes);
 
   const chartData = {
     labels: ["โชคลาภ", "บารมี", "อำนาจ", "สุขภาพ", "คลามร่ำรวย"],

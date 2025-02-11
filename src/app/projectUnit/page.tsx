@@ -1,7 +1,7 @@
-'use client';
+"use client";
 
-import React, { useState } from 'react';
-import { useRouter } from 'next/navigation';
+import React, { useState } from "react";
+import { useRouter } from "next/navigation";
 
 interface ProjectType {
   projectId: string;
@@ -23,40 +23,40 @@ interface BuildingType {
 const ProjectUnit = () => {
   const router = useRouter();
   const [projects] = useState<ProjectType[]>([
-    { projectId: '1', projectName: 'The Origin Ladprao 15' },
-    { projectId: '2', projectName: 'The Origin Ratchada-Ladprao' },
+    { projectId: "1", projectName: "The Origin Ladprao 15" },
+    { projectId: "2", projectName: "The Origin Ratchada-Ladprao" },
   ]);
 
   const [units] = useState<UnitType[]>([
-    { unitId: '101', unitName: '101', buildingId: 'B1' },
-    { unitId: '102', unitName: '102', buildingId: 'B1' },
-    { unitId: '201', unitName: '103', buildingId: 'B3' },
-    { unitId: '202', unitName: '104', buildingId: 'B3' },
+    { unitId: "101", unitName: "101", buildingId: "B1" },
+    { unitId: "102", unitName: "102", buildingId: "B1" },
+    { unitId: "201", unitName: "103", buildingId: "B3" },
+    { unitId: "202", unitName: "104", buildingId: "B3" },
   ]);
 
   const [buildings] = useState<BuildingType[]>([
-    { buildingId: 'B1', buildingName: 'Building 1', projectId: '1' },
-    { buildingId: 'B2', buildingName: 'Building 2', projectId: '1' },
-    { buildingId: 'B3', buildingName: 'Building 3', projectId: '2' },
-    { buildingId: 'B4', buildingName: 'Building 4', projectId: '2' },
+    { buildingId: "B1", buildingName: "Building 1", projectId: "1" },
+    { buildingId: "B2", buildingName: "Building 2", projectId: "1" },
+    { buildingId: "B3", buildingName: "Building 3", projectId: "2" },
+    { buildingId: "B4", buildingName: "Building 4", projectId: "2" },
   ]);
 
   const [selectedProject, setSelectedProject] = useState<string | undefined>(
-    undefined,
+    undefined
   );
   const [selectedBuilding, setSelectedBuilding] = useState<string | undefined>(
-    undefined,
+    undefined
   );
   const [selectedUnit, setSelectedUnit] = useState<string | undefined>(
-    undefined,
+    undefined
   );
 
   const filteredBuildings = buildings.filter(
-    (building) => building.projectId === selectedProject,
+    (building) => building.projectId === selectedProject
   );
 
   const filteredUnits = units.filter(
-    (unit) => unit.buildingId === selectedBuilding,
+    (unit) => unit.buildingId === selectedBuilding
   );
 
   const handleProjectChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
@@ -66,17 +66,17 @@ const ProjectUnit = () => {
   };
 
   const handleBuildingChange = (
-    event: React.ChangeEvent<HTMLSelectElement>,
+    event: React.ChangeEvent<HTMLSelectElement>
   ) => {
     setSelectedBuilding(event.target.value);
     setSelectedUnit(undefined);
   };
 
   const goToNextPage = () => {
-    router.push('/projectUnit/start');
+    router.push("/projectUnit/start");
   };
-  console.log('1', selectedProject);
-  console.log('2', selectedBuilding);
+  console.log("1", selectedProject);
+  console.log("2", selectedBuilding);
 
   return (
     <div className="flex flex-col justify-center items-center min-h-screen bg-[#FEA42B] p-4 gap-6">
