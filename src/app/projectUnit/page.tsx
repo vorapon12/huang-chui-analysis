@@ -79,7 +79,7 @@ const ProjectUnit = () => {
   console.log("2", selectedBuilding);
 
   return (
-    <div className="flex flex-col justify-center items-center min-h-screen bg-[#FEA42B] p-4 gap-6">
+    <div className="flex flex-col justify-center items-center min-h-screen p-4 gap-6">
       <div className="w-[500px]">
         {/* Card สำหรับเลือก Project */}
         <div className="mb-6 bg-white rounded-md p-4">

@@ -2,6 +2,7 @@ import React from "react";
 import { MainLayouts } from "../MainLayouts";
 import { Checkbox } from "@mui/material";
 import { useRouter } from "next/navigation";
+
 const Consend = () => {
   const router = useRouter();
   return (
@@ -54,11 +55,12 @@ const Consend = () => {
           <div
             style={{
               width: 664,
+              height: "calc(100vh - 300px)",
               alignSelf: "stretch",
               padding: 16,
               background: "#ECECEC",
               borderRadius: 8,
-              overflow: "hidden",
+              overflowY: "auto",
               flexDirection: "column",
               justifyContent: "flex-start",
               alignItems: "flex-start",
@@ -136,7 +138,7 @@ const Consend = () => {
               style={{
                 color: "rgba(0, 0, 0, 0.85)",
                 fontSize: 18,
-                fontFamily: "Noto Sans Thai UI",
+                fontFamily: "Noto Sans Thai",
                 fontWeight: "400",
                 wordWrap: "break-word",
               }}
@@ -156,6 +158,11 @@ const Consend = () => {
               alignItems: "center",
               gap: 8,
               display: "flex",
+              cursor: "pointer",
+            }}
+            onClick={() => {
+              console.log("clicked");
+              router.push("/form");
             }}
           >
             <div
@@ -171,13 +178,9 @@ const Consend = () => {
                 style={{
                   color: "white",
                   fontSize: 18,
-                  fontFamily: "Noto Sans Thai UI",
+                  fontFamily: "Noto Sans Thai",
                   fontWeight: "400",
                   wordWrap: "break-word",
-                }}
-                onClick={() => {
-                  console.log("clicked");
-                  router.push("/form");
                 }}
               >
                 ยืนยัน

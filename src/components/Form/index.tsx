@@ -5,27 +5,54 @@ import { useRouter } from "next/navigation";
 import axios from "axios";
 import { useUnitStore } from "@/common/unitStore";
 import { useState } from "react";
+import { unitItems } from "@/mock";
+
+type FormData = {
+  birth_date: string;
+  phone_number: string;
+  name: string;
+};
+
 const Form = () => {
   const router = useRouter();
   const [loading, setLoading] = useState(false);
-  const { setDataRes } = useUnitStore();
+  const { setDataRes, selectedUnit, floor } = useUnitStore();
 
-  const saveToLocalStorage = (key: string, value: any) => {
+  const saveToLocalStorage = (key: string, value: Record<string, unknown>) => {
     if (typeof window !== "undefined") {
       localStorage.setItem(key, JSON.stringify(value));
     }
   };
+  const [data, setData] = useState<FormData>({
+    birth_date: "",
+    phone_number: "",
+    name: "",
+  });
 
-  const sendToApi = () => {
+  const sendToApi = (data: FormData, selectedUnit: string, floor: number) => {
+    const rr = selectedUnit.substring(1, 4);
+    const unitDetail = unitItems.find((item) => item.text === rr);
+
+    const newInput = {
+      house_number: unitDetail?.house_number,
+      direction: unitDetail?.direction,
+      zone: unitDetail?.zone,
+      floor,
+      birth_date: new Date(
+        new Date(data.birth_date).setFullYear(
+          new Date(data.birth_date).getFullYear() + 543
+        )
+      ),
+      phone_number: data.phone_number,
+    };
+
+    console.log("newInput: ", newInput);
+
     axios
-      .post("https://readers-ordinance-once-enters.trycloudflare.com/analyze", {
-        house_number: "88/42",
-        direction: "ทิศเหนือ",
-        zone: "citi view",
-        floor: 15,
-        birth_date: "2534-05-15",
-        phone_number: "0800043226",
-      })
+      .post(
+        "https://readers-ordinance-once-enters.trycloudflare.com/analyze",
+        newInput
+      )
       .then(function (response) {
         console.log(response);
         setLoading(false);
@@ -45,8 +72,7 @@ const Form = () => {
     <MainLayouts>
       <div
         style={{
-          width: 712,
-          height: 438,
+          width: "calc(100vw - 400px)",
           padding: 24,
           background: "white",
           boxShadow: "0px 7px 16px rgba(194, 194, 194, 0.15)",
@@ -96,9 +122,11 @@ const Form = () => {
           </div>
           <TextField
             id="outlined-basic"
-            label="Outlined"
             variant="outlined"
             style={{ width: "100%" }}
+            onChange={(e) => {
+              if (e.target.value) setData({ ...data, name: e.target.value });
+            }}
           />
         </div>
         <div
@@ -126,9 +154,12 @@ const Form = () => {
           </div>
           <TextField
             id="outlined-basic"
-            label="Outlined"
             variant="outlined"
             style={{ width: "100%" }}
+            onChange={(e) => {
+              if (e.target.value)
+                setData({ ...data, phone_number: e.target.value });
+            }}
           />
         </div>
         <div
@@ -159,27 +190,35 @@ const Form = () => {
             type="date"
             variant="outlined"
             style={{ width: "100%" }}
-            // defaultValue={new Date().toISOString().split("T")[0]}
+            onChange={(e) => {
+              if (e.target.value) {
+                const date = new Date(e.target.value);
+                const formattedDate = date.toISOString().split("T")[0];
+                setData({ ...data, birth_date: formattedDate });
+              }
+            }}
           />
         </div>
+
         <div
           style={{
             width: 241,
             height: 48,
             paddingLeft: 16,
             paddingRight: 16,
-            background: "#4100F4",
+            background: selectedUnit ? "#4100F4" : "gray",
             borderRadius: 10,
             justifyContent: "center",
             alignItems: "center",
             gap: 8,
             display: "flex",
-            cursor: "pointer",
+            cursor: selectedUnit ? "pointer" : "not-allowed",
           }}
           onClick={() => {
+            if (!selectedUnit) return;
             console.log("clicked");
             setLoading(true);
-            sendToApi();
+            sendToApi(data, selectedUnit, floor);
             // router.push("/form");
           }}
         >
@@ -196,12 +235,12 @@ const Form = () => {
               style={{
                 color: "white",
                 fontSize: 18,
-                fontFamily: "Noto Sans Thai UI",
+                fontFamily: "Noto Sans Thai",
                 fontWeight: "400",
                 wordWrap: "break-word",
               }}
             >
-              {loading ? "loading" : "ยืนยัน"}
+              ยืนยัน
             </div>
           </div>
         </div>

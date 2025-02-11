@@ -9,15 +9,19 @@ interface UnitState {
   birth_date: string;
   phone_number: string;
   dataRes: string;
+  selectedUnit: string;
+  name: string;
   setUnit: (
     house_number: string,
     direction: string,
     zone: string,
     floor: number,
     birth_date: string,
-    phone_number: string
+    phone_number: string,
+    name: string
   ) => void;
   setDataRes: (dataRes: string) => void;
+  setSelectedUnit: (selectedUnit: string, floor: number) => void;
 }
 
 export const useUnitStore = create<UnitState>((set) => ({
@@ -28,13 +32,22 @@ export const useUnitStore = create<UnitState>((set) => ({
   birth_date: "",
   phone_number: "",
   dataRes: "",
+  selectedUnit: "",
+  name: "",
+  setSelectedUnit: (selectedUnit: string, floor: number) => {
+    set({
+      selectedUnit,
+      floor,
+    });
+  },
   setUnit: (
     house_number: string,
     direction: string,
     zone: string,
     floor: number,
     birth_date: string,
-    phone_number: string
+    phone_number: string,
+    name: string
   ) =>
     set({
       house_number,
@@ -43,6 +56,7 @@ export const useUnitStore = create<UnitState>((set) => ({
       floor,
       birth_date,
       phone_number,
+      name,
     }),
   setDataRes: (dataRes: string) => {
     set({
