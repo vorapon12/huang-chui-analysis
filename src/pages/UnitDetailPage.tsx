@@ -18,6 +18,7 @@ interface Package {
     Health: number;
     Wealth: number;
   };
+  background: string;
 }
 
 const styles: Record<string, React.CSSProperties> = {
@@ -71,20 +72,10 @@ const styles: Record<string, React.CSSProperties> = {
   },
 };
 
-const data = {
-  scores: {
-    Luck: 85,
-    Prestige: 80,
-    Power: 75,
-    Health: 90,
-    Wealth: 88,
-  },
-};
-
 const packages: Package[] = [
   {
     name: "แพ็คเกจพื้นฐาน",
-    price: "฿ xxxxxxxx",
+    price: "฿ รวมในของแถม",
     increase: 22,
     total: 65,
     features: [
@@ -102,10 +93,11 @@ const packages: Package[] = [
       Wealth: 68,
     },
     color: "#4100F4",
+    background: "rgba(65, 0, 244, 0.30)",
   },
   {
     name: "แพ็คเกจกลาง",
-    price: "฿ xxxxxxxx",
+    price: "฿ 50,000",
     increase: 30,
     total: 73,
     scores: {
@@ -127,10 +119,11 @@ const packages: Package[] = [
       "ผ้าปูเตียงเสริมธาตุ",
     ],
     color: "#0DA47B",
+    background: "rgba(13, 164, 123, 0.30)",
   },
   {
     name: "แพ็คเกจพรีเมียม",
-    price: "฿ xxxxxxxx",
+    price: "฿ 350,000",
     increase: 57,
     total: 100,
     features: [
@@ -152,6 +145,7 @@ const packages: Package[] = [
       Wealth: 92,
     },
     color: "#FF7439",
+    background: "rgba(255, 116, 57, 0.30)",
   },
 ];
 
@@ -183,7 +177,7 @@ const UnitComponent = () => {
         labels: ["โชคลาภ", "บารมี", "อำนาจ", "สุขภาพ", "คลามร่ำรวย"],
         datasets: [
           {
-            label: "ค่าพลัง",
+            label: "ค่าฮวงจุ้ย",
             data: [
               dataRes?.scores.Luck,
               dataRes?.scores.Power,
@@ -191,8 +185,8 @@ const UnitComponent = () => {
               dataRes?.scores.Health,
               dataRes?.scores.Wealth,
             ],
-            backgroundColor: "#AA0000",
-            borderColor: "#AA0000",
+            backgroundColor: "rgba(0, 0, 0, 0.30)",
+            borderColor: "#5F5C5C",
             borderWidth: 2,
           },
           ...packages.map((pkg) => ({
@@ -204,7 +198,7 @@ const UnitComponent = () => {
               pkg.scores.Health,
               pkg.scores.Wealth,
             ],
-            backgroundColor: pkg.color,
+            backgroundColor: pkg.background,
             borderColor: pkg.color,
           })),
         ],
