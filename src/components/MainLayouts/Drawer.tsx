@@ -4,8 +4,10 @@ import MenuIcon from "@mui/icons-material/Menu";
 import Image from "next/image";
 import { useUnitStore } from "@/common/unitStore";
 import { floorItems } from "@/mock";
+import { useRouter } from "next/navigation";
 
 function LeftDrawer() {
+  const router = useRouter();
   const [open, setOpen] = useState(false);
   const { selectedUnit, setSelectedUnit } = useUnitStore();
 
@@ -75,11 +77,12 @@ function LeftDrawer() {
               <Image src="/user.svg" alt="user" width={14} height={17} />
               <div>คุณดาริน</div>
             </div>
-            <div className="flex flex-col gap-2" style={{ cursor: "pointer" }}>
-              <div
-                className="h-12 px-4 bg-white rounded-lg border border-[#d9d9d9] justify-center items-center gap-2 inline-flex"
-                // onClick={() => setSelectedUnit(p.text)}
-              >
+            <div
+              className="flex flex-col gap-2"
+              style={{ cursor: "pointer" }}
+              onClick={() => router.replace("/")}
+            >
+              <div className="h-12 px-4 bg-white rounded-lg border border-[#d9d9d9] justify-center items-center gap-2 inline-flex">
                 <div className="justify-center items-center gap-2 flex">
                   <div className="text-black/90 text-base font-normal font-['Inter'] leading-normal">
                     จบการดูฮวงจุ้ย

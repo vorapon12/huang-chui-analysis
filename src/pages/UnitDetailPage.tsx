@@ -218,7 +218,7 @@ const UnitComponent = () => {
         data: chartData,
       });
     }
-  }, [dataRes, pkgData]);
+  }, [dataRes]);
 
   const roomData = {
     room: "A1102",
